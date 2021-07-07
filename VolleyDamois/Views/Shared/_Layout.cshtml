@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Volley damois</title>
+    <environment include="Development">
+        <link href="~/css/all.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link href="~/minlib/style.css" rel="stylesheet" />
+    </environment>
+    @RenderSection("CSS", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-volleyball-ball"></i>
+                Volley damois
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" asp-controller="Teams" asp-action="Index">Tableau de bord</a>
+                    <partial name="_LoginPartial"/>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+<footer class="footer bg-dark d-flex justify-content-center">
+    <p class="m-0">
+        &copy; 2020 - Volley damois
+    </p>
+</footer>
+<environment include="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/jqueryui/jquery-ui.js"></script>
+    <script src="~/lib/html2pdf/html2pdf.bundle.min.js"></script>
+    <script src="~/lib/print/print.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/ConfrontationCreator.js"></script>
+    <script src="~/js/TableFilter.js"></script>
+    <script src="~/js/TablePdfCreator.js"></script>
+    <script src="~/js/Print.js"></script>
+    <script src="~/js/AutocompleteTeams.js"></script>
+    <script src="~/js/FilterResults.js"></script>
+    <script src="~/js/TeamCreator.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/lib/html2pdf/html2pdf.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/lib/print/print.min.js" asp-append-version="true"></script>
+    <script src="~/minlib/all.min.js" asp-append-version="true"></script>
+</environment>
+@RenderSection("Scripts", required: false)
+</body>
+</html>

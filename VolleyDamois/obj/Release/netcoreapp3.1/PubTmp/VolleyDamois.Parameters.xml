@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="StudentWeb/grER" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\devWebB2\\VolleyDamois\\VolleyDamois\\obj\\Release\\netcoreapp3\.1\\PubTmp\\Out\\$" />
+  </parameter>
+  <parameter name="VolleyDamois.Models.VolleyDbContext" description="" value="Server=192.168.128.18; Database=in18b1078; user id=in18b1078; password=7547" tags="dbfullsql">
+    <parameterEntry kind="ProviderPath" scope="dbfullsql" match="^D:\\devWebB2\\VolleyDamois\\VolleyDamois\\obj\\Release\\netcoreapp3\.1\\PubTmp\\EFSQLScripts\\VolleyDamois\.Models\.VolleyDbContext\.sql$" />
+  </parameter>
+</parameters>

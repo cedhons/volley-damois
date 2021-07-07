@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="D:\devWebB2\VolleyDamois\VolleyDamois\obj\Release\netcoreapp3.1\PubTmp\Out\" />
+  <dbfullsql path="D:\devWebB2\VolleyDamois\VolleyDamois\obj\Release\netcoreapp3.1\PubTmp\EFSQLScripts\VolleyDamois.Models.VolleyDbContext.sql" />
+</sitemanifest>

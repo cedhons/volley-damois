@@ -1,0 +1,10 @@
+﻿@page
+@model LogoutModel
+@{
+    Layout = "_TitleLayout";
+    ViewData["Title"] = "Déconnexion";
+    ViewData["DisplayedTitle"] = "Vous avez été déconnecté avec succès.";
+}
+<div class="d-flex justify-content-center m-5">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-info btn-lg" role="button">Revenir à l'acceuil</a>
+</div>

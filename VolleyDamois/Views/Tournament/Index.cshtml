@@ -1,0 +1,80 @@
+﻿@model VolleyDamois.Models.ViewModel.PresentationViewModel<Category, Team>
+@{
+    Layout = "_TitleLayout";
+    ViewData["Title"] = "Infos";
+    ViewData["DisplayedTitle"] = "Tournoi de beach-volley de cet été 2020";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Déroulement du tournoi</div>
+                <div class="card-body d-flex flex-column justify-content-around">
+                    <div class="card-text">
+                        <p>
+                            Le tournoi, qui se déroule sur deux jours, est divisé en plusieurs matchs de deux sets, ces derniers étant limités à 10 minutes chacun. Une pause de 10 minutes entre chaque match est prévue afin de laisser le temps aux arbitres de rendre les résultats. Les premiers matchs commencent à 9h et une pause est prévue entre 12h30 et 13h30.
+                        </p>
+                        <p>
+                            Trois catégories (nationale, provinciale, loisir) existent afin d’avoir des niveaux équilibrés. Les équipes de la catégorie nationale sont constituées de 3 joueurs sur le terrain (avec possibilité d’un réserviste), celles des niveaux national et loisir, de 4 joueurs (avec possibilité de deux réservistes). Chaque équipe doit obligatoirement contenir une joueuse.
+                        </p>
+                        <p>
+                            La parcelle ensablée permet d’accueillir 12 terrains de beach-volley. Chaque catégorie dispose de 4 terrains dédiés. Les terrains numérotés de 1 à 4 sont réservés à la catégorie nationale, les terrains de 5 à 8 à la catégorie provinciale et les terrains de 9 à 12 à la catégorie loisir.
+                        </p>
+                        <p>
+                            Le tournoi se déroule en deux phases, une par journée de compétition. La première consiste en l’organisation des matchs de poules. Une poule correspond à un mini championnat où toutes les équipes d’une même poule vont s’affronter. Le nombre de victoires permet d’établir un classement (2 points la victoire, 0 la défaite).
+                        </p>
+                        <p>
+                            En cas d’égalité lors d’un match, nous regardons le nombre de points marqués sur les deux sets, l’équipe ayant le plus grand nombre gagne le match et les points de la victoire. Si une égalité parfaite survient, un dernier échange (1 point) est joué permettant de désigner le vainqueur.
+                        </p>
+                        <p>
+                            Si en fin de journée, une égalité apparait au classement d'une poule, le nombre de points marqués durant toute la journée est pris en compte et s’il y a encore égalité, ce sont les points « contre » qui sont décisifs.
+                        </p>
+                        <p>
+                            Le lendemain, les 4 meilleures équipes de chaque poule vont s’affronter dans un tableau final par élimination directe. Ce tableau est construit de la manière suivante (dans le cas de poule de 4 équipes) : le 1er de la première poule rencontre le quatrième de la 2ème poule, le 2ème de la première poule rencontre le troisième de la deuxième poule, etc. L'équipe victorieuse de ce deuxième jour sera ainsi celle qui remporte le tournoi.
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-info mx-2" asp-controller="Teams" asp-action="Index">Tableau de bord</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 d-flex flex-column mb-3">
+            <div class="card mb-3 h-100">
+                <div class="card-header">Adresse</div>
+                <div class="card-body d-flex flex-column justify-content-around">
+                    <div class="card-text">
+                        <p>
+                            43 rue de la chaussée, 4000 Liège, Belgique
+                        </p>
+                    </div>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d741.1681257650774!2d5.970790768999126!3d50.65974319819462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c08f987a7bbfd7%3A0x21f416a80eada172!2sVBC%20St-Jo%20Welkenraedt!5e0!3m2!1sfr!2sbe!4v1588531793212!5m2!1sfr!2sbe" width="600" height="450" frameborder="0" style="border: 0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="card h-100 flex-grow-1">
+                <div class="card-header">Comment s'inscrire</div>
+                <div class="card-body d-flex flex-column justify-content-around">
+                    <div class="card-text">
+                        <p>
+                            Pour participer au tournoi, les joueurs qui désirent s’inscrire dans la catégorie nationale ou provinciale doivent être affiliés à la fédération de volley wallonie bruxelles (fvwb) ou Volley vlaanderen (vv).
+                        </p>
+                        <p>
+                            L’inscription se fait par équipe et doit contenir le nom de l’équipe et les joueurs qui la composent. Ces derniers doivent fournir leur nom, prénom, adresse et numéro d’affiliation si nécessaire. Il faut aussi préciser le numéro de téléphone et l’adresse email du capitaine (qui est un membre de l’équipe).
+                        </p>
+                        <p>
+                            Le tournoi se déroulant sur deux jours, il est possible de dormir sur place. Il faudra donc préciser à l’inscription si l’équipe désire réserver un emplacement dans le champ jouxtant les terrains.
+                        </p>
+                        <p>
+                            Le premier jour du tournoi, le capitaine d’équipe devra se présenter au guichet se trouvant à l’entrée entre 7h30 et 8h30, afin d’officialiser la présence de l’équipe. Une équipe ne se présentant pas durant cette période ne pourra jouer.
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a class="btn btn-info mx-2" asp-controller="Teams" asp-action="Create">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

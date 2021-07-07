@@ -1,0 +1,110 @@
+﻿@using Microsoft.AspNetCore.Antiforgery
+@using Microsoft.AspNetCore.Identity
+@using VolleyDamois.Models.Interfaces
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IAntiforgery csrf
+
+@model VolleyDamois.Models.ViewModel.PresentationViewModel<DateTime, Confrontation>
+
+@{
+    Layout = "_Tabs";
+    ViewData["Title"] = "Espace comité";
+}
+
+@functions
+{
+
+    public string GetAntiCsrfToken()
+    {
+        return csrf.GetAndStoreTokens(Context).RequestToken;
+    }
+
+}
+
+<input type="hidden" id="requestCsrfToken" name="requestCsrfToken" value="@GetAntiCsrfToken()" />
+
+<div class="m-4">
+    <div class="d-flex flex-column align-items-center">
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Committee"))
+        {
+            <div class="d-flex mb-5">
+                <a asp-action="CreateConfrontations" asp-route-typeOfConfrontation="@ConfrontationCreatorType.Pool" class="btn btn-primary mx-3 btnDay1 @(ViewBag.CanCreatePoolConfrontation ? "" : "disabled")">Générer les matchs</a>
+                <a asp-action="CreateConfrontations" asp-route-typeOfConfrontation="@ConfrontationCreatorType.Elimination" class="btn btn-primary mx-3 btnDay2 @(ViewBag.CanCreatePoolEliminationConfrontation ? "" : "disabled")" style="display: none">Générer les premier matchs</a>
+                <a asp-action="CreateEliminationConfrontations" class="btn btn-primary mx-3 btnDay2 @(ViewBag.CanCreateEliminationConfrontation ? "" : "disabled")" style="display: none">Générer les matchs suivants</a>
+                <button class="btn btn-primary mx-3" onClick="createPdf('Matchs')"><i class="fas fa-file-export fa-lg"></i></button>
+                <button class="btn btn-primary mx-3" onClick="printPage('Matchs')"><i class="fas fa-print fa-lg"></i></button>
+            </div>
+        }
+        <form asp-action="Confrontations" method="get" class="form-inline mb-3">
+            <select id="daysDropdown" class="custom-select mr-3">
+                @for (int i = 1; i <= ViewBag.NbOfDays; i++)
+                {
+                    <option value="@(i)">Jour @i</option>
+                }
+            </select>
+            <div class="input-group">
+                <input id="searchBar" type="text" class="form-control" name="searchedTeam" value="@ViewBag.CurrentTeamSearched" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+                    <a asp-action="Confrontations" class="btn btn-danger"><i class="fas fa-times"></i></a>
+                </div>
+            </div>
+        </form>
+    </div>
+    @{
+        int count = 1;
+        int day = 1;
+    }
+    @if (Model.Keys.Count == 0)
+    {
+        <p>Aucun matchs n'a été créé</p>
+    }
+    <div id="printable">
+        @foreach (var dateTime in Model.Keys)
+        {
+            int newDay = dateTime.Day - Model.Keys.First().Day + 1;
+            if (day < newDay)
+            {
+                count = 1;
+                day = newDay;
+            }
+            <div class="matchOfDay@(day) not-break">
+                <h4 class="my-3">Jour @day - @dateTime.ToString("HH:mm") - @Model[dateTime].First().Level.Name :</h4>
+                <div class="row">
+                    <table class="col table table-striped table-dark m-3 filterable-table">
+                        <thead>
+                            <tr class="filter-columns">
+                                <th>Terrain</th>
+                                <th>Equipe 1</th>
+                                <th>Equipe 2</th>
+                                <th>Equipe arbitre</th>
+                            </tr>
+                        </thead>
+                        <tbody class="filtered-rows">
+                            @foreach (var confrontation in Model[dateTime])
+                            {
+                                <tr>
+                                    <td>@confrontation.Terrain.Number</td>
+                                    <td>@confrontation.TeamA.Name</td>
+                                    <td>@confrontation.TeamB.Name</td>
+                                    <td>@confrontation.TeamReferee.Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            count++;
+        }
+    </div>
+</div>
+@*
+@section Scripts {
+    <script src="~/js/ConfrontationCreator.js"></script>
+    <script src="~/js/TableFilter.js"></script>
+    <script src="~/js/TablePdfCreator.js"></script>
+    <script src="~/js/Print.js"></script>
+    <script src="~/js/AutocompleteTeams.js"></script>
+}
+*@

@@ -1,0 +1,3 @@
+Courriel: bernard@mail.com, Mot de passe: Pass123@
+Courriel: nicola@mail.com, Mot de passe: Pass123@
+Courriel: marie@mail.com, Mot de passe: Pass123@

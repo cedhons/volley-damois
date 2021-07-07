@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model VolleyDamois.Models.ViewModel.PresentationViewModel<DateTime, Confrontation>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    Layout = "_Tabs";
+    ViewData["Title"] = "Espace comité";
+    int countRound = 1;
+    int day = 1;
+    bool isFromCommittee = SignInManager.IsSignedIn(User) && User.IsInRole("Committee");
+}
+
+<form asp-action="Results">
+    <div class="m-4">
+        <div class="d-flex flex-column align-items-center">
+            @if (isFromCommittee)
+            {
+                <div class="mb-5">
+                    <button type="submit" class="btn btn-primary mx-3"><i class="fas fa-save fa-lg"></i></button>
+                    <button type="button" class="btn btn-primary mx-3" onClick="printPage('Résultats')"><i class="fas fa-print fa-lg"></i></button>
+                </div>
+            }
+            @if (Model.Keys.Count == 0)
+            {
+                <p>Aucun matchs n'a été créé</p>
+            }
+            else if (Model.Keys.Count > 0)
+            {
+                <div class="form-inline">
+                    <div class="input-group mb-3">
+                        <select id="roundsDropdown" class="form-control">
+                            @foreach (var dateTime in Model.Keys)
+                            {
+                                int newDay = dateTime.Day - Model.Keys.First().Day + 1;
+                                var roundName = Model[dateTime].First().Level.Name;
+                                if (day < newDay)
+                                {
+                                    day = newDay;
+                                    countRound = 1;
+                                }
+                                <option value="round@($"{countRound}{day}")">@dateTime.ToString("HH:mm") - Jour @day - @roundName</option>
+                                countRound++;
+                            }
+                        </select>
+                        <div class="input-group-append">
+                            <button type="button" id="displayAll" class="btn btn-success"><i class="fas fa-arrows-alt-v"></i></button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @{
+            countRound = 1;
+            day = 1;
+        }
+        <div id="printable">
+            @foreach (var dateTime in Model.Keys)
+            {
+                var roundName = Model[dateTime].First().Level.Name;
+                int countConfrontation = 0;
+                int newDay = dateTime.Day - Model.Keys.First().Day + 1;
+                if (day < newDay)
+                {
+                    day = newDay;
+                    countRound = 1;
+                }
+                <div id="round@($"{countRound}{day}")" class="round not-break">
+                    <h4 class="my-3">Jour @day - @roundName :</h4>
+                    <div class="row">
+                        <table class="col table table-striped table-dark m-3 filterable-table">
+                            <thead>
+                                <tr class="filter-columns">
+                                    <th>Equipe 1</th>
+                                    <th>Equipe 2</th>
+                                    <th>Set 1</th>
+                                    <th>Set 2</th>
+                                </tr>
+                            </thead>
+                            <tbody class="filtered-rows">
+                                @foreach (var confrontation in Model[dateTime])
+                                {
+                                    <tr>
+                                        <td>@confrontation.TeamA.Name</td>
+                                        <td>@confrontation.TeamB.Name</td>
+                                        <td>
+                                            @if (isFromCommittee)
+                                            {
+                                                <input type="hidden" name="encodingVM[@countConfrontation].Id" value="@confrontation.Id" />
+                                                <input type="number" name="encodingVM[@countConfrontation].SetOneA" value="@confrontation.SetOneA" />
+                                                <span> - </span>
+                                                <input type="number" name="encodingVM[@countConfrontation].SetOneB" value="@confrontation.SetOneB" />
+                                            }
+                                            else
+                                            {
+                                                <p>@confrontation.SetOneA - @confrontation.SetOneB</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (isFromCommittee)
+                                            {
+                                                <input type="number" name="encodingVM[@countConfrontation].SetTwoA" value="@confrontation.SetTwoA" />
+                                                <span> - </span>
+                                                <input type="number" name="encodingVM[@countConfrontation].SetTwoB" value="@confrontation.SetTwoB" />
+                                            }
+                                            else
+                                            {
+                                                <p>@confrontation.SetTwoA - @confrontation.SetTwoB</p>
+                                            }
+                                        </td>
+                                    </tr>
+                                    countConfrontation++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                countRound++;
+            }
+        </div>
+    </div>
+</form>
+@*
+@section Scripts {
+    <script src="~/js/TableFilter.js"></script>
+    <script src="~/js/TablePdfCreator.js"></script>
+    <script src="~/js/Print.js"></script>
+    <script src="~/js/FilterResults.js"></script>
+}
+*@

@@ -1,0 +1,116 @@
+﻿@using VolleyDamois.Models.Enum
+@model VolleyDamois.Models.ViewModel.TeamCreatorViewModel
+
+@{
+    Layout = "_TitleLayout";
+    ViewData["Title"] = "Create";
+    ViewData["DisplayedTitle"] = "Inscription au tournoi de beach-volley de cet été 2020";
+}
+
+<div class="container">
+    <form asp-action="Create" class="row justify-content-around">
+        <div class="col-12 col-lg-4 align-self-start">
+            <div class="card h-100 mb-3">
+                <div class="card-header">Formulaire d'inscription</div>
+                <div class="card-body d-flex flex-column justify-content-around">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Team.Name" class="control-label"></label>
+                        <input asp-for="Team.Name" class="form-control" />
+                        <span asp-validation-for="Team.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Category" class="control-label"></label>
+                        <select asp-for="Category" asp-items="@new SelectList(Enum.GetValues(typeof(Categories)))" class="custom-select"></select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Team.Players" class="control-label"></label>
+                        <select id="players-list" class="custom-select" multiple>
+                        </select>
+                        <span asp-validation-for="Team" class="text-danger"></span>
+                    </div>
+                    <div class="form-group d-flex justify-content-end">
+                        <button id="add-btn" type="button" class="btn btn-success mr-3">Ajouter</button>
+                        <button id="remove-btn" type="button" class="btn btn-danger">Supprimer</button>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Team.Camping" /> @Html.DisplayNameFor(model => model.Team.Camping)
+                        </label>
+                        <span asp-validation-for="Team.Camping" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" value="Create" class="btn btn-primary">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="card h-100 mb-3">
+                <div class="card-header">Informations du membre sélectionné</div>
+                <div class="card-body d-flex flex-column justify-content-around">
+                    @for (int i = 0; i < ViewBag.MaxPlayers; i++)
+                    {
+                    <div class="player-form">
+                        <div class="form-group">
+                            <label asp-for="@Model.Team.Players[i].AffiliationNumber" class="control-label"></label>
+                            <input asp-for="@Model.Team.Players[i].AffiliationNumber" class="form-control" />
+                            <span asp-validation-for="@Model.Team.Players[i].AffiliationNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Team.Players[i].Lastname" class="control-label"></label>
+                            <input asp-for="@Model.Team.Players[i].Lastname" class="form-control" />
+                            <span asp-validation-for="@Model.Team.Players[i].Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Team.Players[i].Firstname" class="control-label"></label>
+                            <input asp-for="@Model.Team.Players[i].Firstname" class="form-control" />
+                            <span asp-validation-for="@Model.Team.Players[i].Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Team.Players[i].Gender" class="control-label"></label>
+                            <select asp-for="@Model.Team.Players[i].Gender" asp-items="@new SelectList(Enum.GetValues(typeof(Genders)))" class="custom-select"></select>
+                            <span asp-validation-for="@Model.Team.Players[i].Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Team.Players[i].Adress" class="control-label"></label>
+                            <input asp-for="@Model.Team.Players[i].Adress" class="form-control" />
+                            <span asp-validation-for="@Model.Team.Players[i].Adress" class="text-danger"></span>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="@Model.Team.Players[i].Reservist" /> @Html.DisplayNameFor(model => model.Team.Players[i].Reservist)
+                            </label>
+                            <span asp-validation-for="@Model.Team.Players[i].Reservist" class="text-danger"></span>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input captain-checkbox" asp-for="@Model.Team.Players[i].Capitain" /> @Html.DisplayNameFor(model => model.Team.Players[i].Capitain)
+                            </label>
+                            <span asp-validation-for="@Model.Team.Players[i].Capitain" class="text-danger"></span>
+                        </div>
+                        <div class="captain-data">
+                            <div class="form-group">
+                                <label asp-for="@Model.Team.Players[i].PhoneNumber" class="control-label"></label>
+                                <input asp-for="@Model.Team.Players[i].PhoneNumber" class="form-control" />
+                                <span asp-validation-for="@Model.Team.Players[i].PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.Team.Players[i].Email" class="control-label"></label>
+                                <input asp-for="@Model.Team.Players[i].Email" class="form-control" />
+                                <span asp-validation-for="@Model.Team.Players[i].Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <input type="hidden" name="NbEncodedPlayers" value="@ViewBag.NbEncodedPlayers" disabled="disabled"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

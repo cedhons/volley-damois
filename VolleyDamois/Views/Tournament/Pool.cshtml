@@ -1,0 +1,78 @@
+﻿@using Castle.Core.Internal
+@using Microsoft.AspNetCore.Identity
+@model VolleyDamois.Models.ViewModel.PresentationViewModel<Category, Pool>
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    Layout = "_Tabs";
+    ViewData["Title"] = "Espace comité";
+}
+
+<div class="m-4">
+    <div class="d-flex flex-column align-items-center">
+
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Committee"))
+        {
+            <div class="d-flex justify-content-center">
+                <a asp-action="CreatePool" class="btn btn-primary mx-3 @(ViewBag.NoPools ? "" : "disabled")">Générer les poules</a>
+                <button class="btn btn-primary mx-3" onClick="createPdf('Classement')"><i class="fas fa-file-export fa-lg"></i></button>
+                <button class="btn btn-primary mx-3" onClick="printPage('Classement')"><i class="fas fa-print fa-lg"></i></button>
+            </div>
+        }
+        @if (ViewBag.NotEnoughTeams)
+        {
+            <p class="text-danger mt-3">
+                Impossible de générer les poules. Vérifiez que le nombre d'équipes inscritent dans chaques catégories est suffisant.
+            </p>
+        }
+    </div>
+    <div id="printable">
+        @if (Model.Keys.IsNullOrEmpty())
+        {
+            <p>Aucune poules n'a encore été créées</p>
+        }
+        @foreach (var category in Model.Keys)
+        {
+            <h4 class="my-3">@category.Name :</h4>
+            <div class="row">
+                @foreach (var pool in Model[category])
+                {
+                    <div class="col-6 p-3">
+                        <table class="table table-striped table-dark filterable-table">
+                            <thead>
+                            <tr>
+                                <th>@pool.Name</th>
+                            </tr>
+                            <tr class="filter-columns">
+                                <th>Nom de l'équipe</th>
+                                <th>Points</th>
+                                <th>Pour</th>
+                                <th>Contre</th>
+                            </tr>
+                            </thead>
+                            <tbody class="filtered-rows">
+                            @foreach (var team in pool.Teams.OrderByDescending(t => t.Points).ThenByDescending(t => t.PointsFor).ThenBy(t => t.PointsAgainst))
+                            {
+                                <tr>
+                                    <td>@team.Name</td>
+                                    <td>@team.Points</td>
+                                    <td>@team.PointsFor</td>
+                                    <td>@team.PointsAgainst</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+@*
+@section Scripts {
+    <script src="~/js/TableFilter.js"></script>
+    <script src="~/js/TablePdfCreator.js"></script>
+    <script src="~/js/Print.js"></script>
+}
+*@

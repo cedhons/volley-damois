@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<h1 class="page-title">@ViewData["DisplayedTitle"]</h1>
+@RenderBody()
+@section Scripts { 
+    @RenderSection("Scripts", required: false) 
+}

@@ -1,0 +1,13 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <a class="nav-item nav-link" asp-area="Identity" asp-page="/Account/Logout">Se déconnecter</a>
+}
+else
+{
+    <a class="nav-item nav-link" asp-area="Identity" asp-page="/Account/Login">Se connecter</a>
+}

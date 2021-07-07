@@ -1,0 +1,112 @@
+﻿@model VolleyDamois.Models.ViewModel.PresentationViewModel<Category, Team>
+@using Castle.Core.Internal
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    Layout = "_Tabs";
+    ViewData["Title"] = "Espace comité";
+    int count = 0;
+}
+
+<form asp-action="Index">
+    <div class="m-4">
+        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Committee"))
+        {
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary" @(ViewBag.NoPools ? "" : "disabled")><i class="fas fa-save fa-lg"></i></button>
+            </div>
+        }
+        @if (Model.Keys.Count == 0)
+        {
+            <p>Il n'y a pas encore d'équipe inscrite</p>
+        }
+        @foreach (var category in Model.Keys)
+        {
+            <h4 class="my-3">@category.Name :</h4>
+
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Committee"))
+                        {
+                            <th>
+                                <div style="width: 115px">
+                                    <input id="@(category)checkbox" class="confirmAll" type="checkbox" />
+                                    <label for="@(category)checkbox" class="m-0">Confirmation</label>
+                                </div>
+                            </th>
+                        }
+                        <th>Nom de l'équipe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Committee"))
+                    {
+                        @for (int i = 0; i < Model[category].Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="teamConfirmVM[@count].Id" value="@Model[category][i].Id" />
+                                    <input class="confirmation" type="checkbox" name="teamConfirmVM[@count].Confirmation" value="true" @(Model[category][i].Confirmation ? "checked=checked" : "") />
+                                </td>
+                                <td>
+                                    @Model[category][i].Name
+                                </td>
+                                @foreach (var player in Model[category][i].Players)
+                                {
+                                    <td>
+                                        @player.Firstname @player.Lastname
+                                    </td>
+                                }
+                            </tr>
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        var confimedTeams = Model[category].Where(t => t.Confirmation).ToList();
+                        @foreach (var team in confimedTeams)
+                        {
+                            <tr>
+                                <td>
+                                    @team.Name
+                                </td>
+                                @foreach (var player in team.Players)
+                                {
+                                    <td>
+                                        @player.Firstname @player.Lastname
+                                    </td>
+                                }
+                            </tr>
+                            count++;
+                        }
+                        @if (confimedTeams.IsNullOrEmpty())
+                        {
+                            <tr>
+                                <td>
+                                    <p>Il n'y a pas encore d'équipes confirmées dans cette catégorie.</p>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    @section Scripts {
+        <script>
+            jQuery.noConflict();
+            (function ($) {
+                $(".confirmAll").change(function () {
+                    if ($(this).prop("checked")) {
+                        $(this).parents("table").find(".confirmation").prop("checked", true);
+                    } else {
+                        $(this).parents("table").find(".confirmation").prop("checked", false);
+                    }
+                });
+            })(jQuery);
+        </script>
+    }
+</form>

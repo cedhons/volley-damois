@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_Layout";
+}
+@section CSS {
+    <environment include="Development">
+        <link href="~/jqueryui/jquery-ui.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+    </environment>
+}
+<ul class="nav justify-content-center bg-dark m-0">
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-controller="Teams" asp-action="Index">Equipes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-controller="Tournament" asp-action="Pool">Poules & Classement</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-controller="Tournament" asp-action="Results">Résultats</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-controller="Tournament" asp-action="Confrontations">Horaire</a>
+    </li>
+</ul>
+@RenderBody()
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
